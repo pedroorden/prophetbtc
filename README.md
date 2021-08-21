@@ -1,2 +1,3 @@
-# prophetbtc
-Código para la extracción, visualización y proyección del precio de BTC.
+# Prophet & BTC
+
+Código para la extracción, visualización y proyección del precio internacional de Bitcoin.
