@@ -1,3 +1,8 @@
+# vamos a explorar el uso de Prophet para la predicción 
+# de series temporales univariantes.
+
+# llamamos a las librerías necesarias.
+
 library(ggplot2)
 library(tidyverse)
 library(tseries)
@@ -5,7 +10,6 @@ library(forecast)
 library(coindeskr)
 library(data.table)
 library(prophet)
-
 
 # Requerimos los datos desde 2017 a la fecha. 
 # Este no es un tema menor!
@@ -16,7 +20,7 @@ library(prophet)
 # así como también la progresión hacia la legitimidad.
 
 
-serie<-get_historic_price('USD','2017-01-01',Sys.Date())
+serie <- get_historic_price('USD','2017-01-01',Sys.Date())
 
 serie <- setDT(serie, keep.rownames = TRUE)[]
 
@@ -26,29 +30,27 @@ serie <- serie%>%
 
 serie$ds = as.Date(serie$ds, "%Y-%m-%d")
 
-#Forecasting using Prophet in R
-#Justin Raymond S. Eloriaga
-#Loading the Packages
-
-#Loading the Dataset
-
 head(serie)
 
-#Calling the Prophet Function to Fit the Model
 
-Model1 <- prophet(serie)
+# llamamos a prophet y fiteamos el modelo
 
-Future1 <- make_future_dataframe(Model1, periods = 180)
+modelo1 <- prophet(serie)
 
-tail(Future1)
+futuro1 <- make_future_dataframe(modelo1, periods = 60) #requerimos una predicción por los próximos 2 meses
 
-Forecast1 <- predict(Model1, Future1)
+tail(futuro1)
 
-tail(Forecast1[c('ds','yhat','yhat_lower','yhat_upper')])
+forecast1 <- predict(modelo1, futuro1)
+
+tail(forecast1[c('ds','yhat','yhat_lower','yhat_upper')])
 
 
-#Plotting the Model Estimates
+# graficamos las estimaciones del modelo
 
-dyplot.prophet(Model1, Forecast1)
+dyplot.prophet(modelo1, forecast1)
 
-prophet_plot_components(Model1, Forecast1)
+prophet_plot_components(modelo1, forecast1)
+
+
+#plot(modelo1, forecast1) + add_changepoints_to_plot(modelo1)
